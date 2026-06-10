@@ -254,6 +254,7 @@ presets:
         # analyze 继承 default: false → 午间不做 AI 分析，节省 API
         # once 继承 default（push: true）→ 只推一次
 
+        analyze: true
       closing_summary:
         name: "收工汇总"
         start: "17:00"
@@ -394,6 +395,70 @@ presets:
 #     晚间汇总 19:00-21:00：推送 ✓ | 分析 ✓ | daily
 #     其余时间走默认配置（静默采集）
 
+  custom_copy:
+    name: 自定义 (副本)
+    description: 完全自由定义时间段、日计划和周映射。
+    default:
+      collect: true
+      analyze: false
+      ai_mode: current
+      push: false
+      report_mode: current
+      once:
+        analyze: true
+        push: true
+    periods:
+      deep_quiet:
+        name: 深夜静默
+        start: "23:00"
+        end: "06:00"
+        collect: true
+        analyze: false
+        push: false
+      weekday_morning:
+        name: 工作日早间
+        start: "08:00"
+        end: "10:00"
+        push: true
+        report_mode: incremental
+        analyze: true
+      weekend_morning:
+        name: 周末早间
+        start: "10:00"
+        end: "12:00"
+        push: true
+        report_mode: daily
+        analyze: true
+      evening_summary:
+        name: 晚间汇总
+        start: "19:00"
+        end: "21:00"
+        analyze: true
+        ai_mode: daily
+        push: true
+        report_mode: daily
+    day_plans:
+      workday:
+        periods:
+          - deep_quiet
+          - weekday_morning
+          - evening_summary
+      weekend:
+        periods:
+          - deep_quiet
+          - weekend_morning
+          - evening_summary
+    week_map:
+      1: workday
+      2: workday
+      3: workday
+      4: workday
+      5: workday
+      6: weekend
+      7: weekend
+    overlap:
+      policy: error_on_overlap
+
 custom:
   name: "自定义"
   description: "完全自由定义时间段、日计划和周映射。"
@@ -467,7 +532,7 @@ custom:
       # interests_file: "xxx.txt"                # AI 兴趣文件（可选，位于 config/custom/ai/）
       # filter_method: "keyword"                # 筛选策略（可选: keyword | ai，不填用全局 filter.method）
       collect: true                # 夜间继续采集数据
-      analyze: true                # 夜间可以跑 AI 分析（反正不推送）
+      analyze: false                # 夜间可以跑 AI 分析（反正不推送）
       push: false                  # 深夜不推送，避免打扰
 
     weekday_morning:
@@ -481,6 +546,7 @@ custom:
       report_mode: "incremental"   # 只推新增内容
       # once 继承 default（push: true）→ 窗口内只推一次
 
+      analyze: true
     weekend_morning:
       name: "周末早间"
       start: "10:00"
@@ -492,6 +558,7 @@ custom:
       report_mode: "daily"         # 周末看全天汇总
       # once 继承 default（push: true）→ 窗口内只推一次
 
+      analyze: true
     evening_summary:
       name: "晚间汇总"
       start: "19:00"
